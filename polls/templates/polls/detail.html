@@ -1,0 +1,15 @@
+{% extends 'polls/base.html' %}
+
+{% block polls_content %}
+
+<h1>{{ survey.title }}</h1>
+<form>
+{% for poll in survey.poll_set.all %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<h2>{{ poll.question }}</h2>
+{% for choice in poll.choice_set.all %}
+	<input type="radio" name="q{{question.id}}choice" id="q{{question.id}}choice{{forloop.counter}}">{{choice.choice_text}}
+{% endfor %}
+{% endfor %}
+</form>
+{% endblock %}
