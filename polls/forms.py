@@ -1,5 +1,5 @@
 from django import forms
-from polls.models import Survey, Poll, Choice
+from polls.models import Survey, Question, Choice
 #For the renderer
 from django.utils.safestring import mark_safe
 
@@ -14,9 +14,11 @@ class ResponseForm(forms.Form):
         super(ResponseForm,self).__init__(*args,**kwargs)
         #Expects survey
         self.survey = survey
-        for question in self.survey.poll_set.all():
+        for question in self.survey.question_set.all():
+            qchoices = question.choice_tuple
             if question.question_type=="CH":
-                qchoices = [(c.choice_text,c.choice_text) for c in question.choices]
                 self.fields['qpk{}'.format(question.pk)]=forms.ChoiceField(label=question.question,choices=qchoices,widget=forms.RadioSelect(renderer=HorizontalRadioRenderer))
             if question.question_type=="TE":
                 self.fields['qpk{}'.format(question.pk)] = forms.CharField()
+            if question.question_type == "TF":
+                self.fields['qpk{}'.format(question.pk)] = forms.ChoiceField(label=question.question, choices=qchoices, widget = forms.RadioSelect(renderer=HorizontalRadioRenderer))

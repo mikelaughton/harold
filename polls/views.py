@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 
-from .models import Choice, Poll, Survey
+from .models import Choice, Question, Survey
 from .forms import *
 
 
@@ -22,7 +22,7 @@ class DetailView(generic.DetailView):
 
 
 class ResultsView(generic.DetailView):
-    model = Poll
+    model = Question
     template_name = 'polls/results.html'
 
 def respond(request,survey_id):
@@ -45,8 +45,7 @@ class Respond(generic.CreateView):
         form_class = self.get_form_class()
         #Creates original form?
         form = self.get_form(form_class)
-        poll_form = QuestionFormSet()
-        return self.render_to_response(self.get_context_data(form=form,poll_form=poll_form))
+        return self.render_to_response(self.get_context_data(form=form))
 
     def post(self,request,*args,**kwargs):
         pass
@@ -58,7 +57,7 @@ class Respond(generic.CreateView):
         pass
 
 def vote(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
+    p = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = p.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
