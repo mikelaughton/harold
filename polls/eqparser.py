@@ -17,10 +17,18 @@ def parse_equation(equation):
 	questions = re.compile("({\d+})")
 	find_questions = questions.findall(equation)
 	if find_questions is not None:
-		xs = ["x{}".format(i) for i in range(len(find_questions))]
+		xs = ["qpk{}".format(i) for i in range(len(find_questions))]
 		dummy_eq = equation
 		for question,x in zip(find_questions,xs):
-			responses[x] = get_response(question)
 			dummy_eq = dummy_eq.replace(question,x)
-		expr = sympy.sympify(dummy_eq).subs(responses.items())
+		expr = sympy.sympify(dummy_eq)
 		return expr
+
+def evaluate_equation(equation,responses):
+	'''
+	Needs {'qpk1':'True','qpk2':'3'}... returns a number based on equation provided.
+
+	equation - sympy expression object
+	responses - dict_items as above
+	'''
+	return equation.subs(responses.items())

@@ -1,7 +1,7 @@
 {% extends "polls/base.html" %}
 {% block polls_content %}
 <h1>{{survey.title}}</h1>
-<form action="self" onsubmit="return false();">
+<form action="{% url 'polls:respond' survey.id %}" method="post" onsubmit="return false();">
     {% csrf_token %}
     <table>
     {{ form.as_table }}

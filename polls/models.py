@@ -1,8 +1,10 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from django.core.exceptions import ValidationError
-import re
-from polls import eqparser
+import re, json
+from polls import eqparser #This should not be in the app.
+import sympy
+
 #from django.utils.translation import ugettext_lazy as _
 #I18n later.
 def _(text):
@@ -15,18 +17,25 @@ class Survey(models.Model):
         return self.title
 
 class Response(models.Model):
+    
     #Build this into a pseudo-JSON thing.
     survey = models.ForeignKey(Survey)
     #This means you have to write a separate view to edit the response.
     response_text = models.TextField()
-    def get_response_to_question(self,question):
-        pass
+    
+    @property
+    def response(self):
+        return json.loads(self.response_text)
 
-    def parse_equation(self):
-        #Really bad parser.
-        questions_identified = re.findall("({\d+})",self.survey.eq)
-        for question in questions_identified:
-            self.get_response_to_question(question)
+    def get_response_to_question(self,question):
+        response = json.loads(self.response_text)
+        return response['qpk'+question]
+
+    def evalute(self):
+        equation = eqparser.parse_equation(self.survey.evaluator)
+        responses = self.response.items()
+        return evaluate_equation(equation,responses.items())
+
 
 #This may need subclassing.
 class Question(models.Model):
@@ -42,6 +51,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=2,choices=qtypes)
     weight = models.DecimalField(max_digits=3,decimal_places=3)
     
+    #This is all to show the PK on the list_display. May not be necessary.
     def primary_key(self):
         return self.pk
 

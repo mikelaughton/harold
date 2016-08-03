@@ -4,9 +4,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 
-from .models import Choice, Question, Survey
+from .models import Choice, Question, Survey, Response
 from .forms import *
 
+import json
+
+def booya(request,response_id):
+	#Delete almost immediately.
+	context = {'response':get_object_or_404(Response,pk=response_id)}
+	return render(request,'polls/booya.html',context)
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -27,7 +33,15 @@ class ResultsView(generic.DetailView):
 
 def respond(request,survey_id):
 	survey = get_object_or_404(Survey,pk=survey_id)
-	form = ResponseForm(survey)
+	if request.method == 'POST':
+		form = ResponseForm(survey,request.POST)
+		if form.is_valid():
+			r_text = json.dumps(form.cleaned_data)
+			response = Response(survey=survey,response_text=r_text)
+			response.save()
+			return HttpResponseRedirect(reverse('polls:booya',kwargs={'response_id':response.pk}))
+	else:	
+		form = ResponseForm(survey)
 	context = { 'survey':survey, 'form':form }
 	#Pass on this lad, look it up.
 	return render(request,'polls/create.html',context)
