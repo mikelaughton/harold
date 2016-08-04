@@ -12,7 +12,7 @@ def _(text):
 
 class Survey(models.Model):
     title = models.CharField(max_length=200)
-    evaluator = models.CharField(max_length=200,blank=True)
+    evaluator = models.CharField(max_length=200,blank=True,help_text=_("Leave this blank for the first save. Enter values such as .5{1}+.5{2} for two equally weighted questions."))
     def __str__(self):
         return self.title
 
@@ -49,7 +49,6 @@ class Question(models.Model):
     survey = models.ForeignKey(Survey,blank=True,null=True)
     question = models.CharField(max_length=200)
     question_type = models.CharField(max_length=2,choices=qtypes)
-    weight = models.DecimalField(max_digits=3,decimal_places=3)
     
     #This is all to show the PK on the list_display. May not be necessary.
     def primary_key(self):
