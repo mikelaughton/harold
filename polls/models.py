@@ -41,9 +41,7 @@ class Response(models.Model):
 class Question(models.Model):
     qtypes = (('CH',_('Multiple choice')),
               ('TE',_('Text')),
-              ('CO',_('Country')),
-              ('WS',_('Word scale')),
-              ('NS',_('Number scale')),
+			  ('LT',_('Long text')),
               ('TF',_('True or false')),
                 )
     survey = models.ForeignKey(Survey,blank=True,null=True)

@@ -14,7 +14,7 @@ class QuestionInline(nested_admin.NestedTabularInline):
     model = Question
     fieldsets = [
         (None, {
-            'fields': ('question','question_type','weight',),
+            'fields': ('question','question_type',),
         }),
         (None, {
             'fields': ('primary_key',),
