@@ -44,7 +44,7 @@ def respond(request,survey_id):
 		form = ResponseForm(survey)
 	context = { 'survey':survey, 'form':form }
 	#Pass on this lad, look it up.
-	return render(request,'polls/create.html',context)
+	return render(request,'polls/respond.html',context)
 
 class Respond(generic.CreateView):
     model = Survey

@@ -152,6 +152,7 @@ INSTALLED_APPS = [
     'reversion',
     'IPR_site',
     'polls',
+	'polls_cms_integration',
     'nested_admin',
 ]
 

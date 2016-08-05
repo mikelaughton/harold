@@ -1,0 +1,5 @@
+{% extends "polls/base.html" %}
+{% block polls_content %}
+{% include "respond_base.html" with survey=survey %}
+<h1>{{survey.title}}</h1>
+{% endblock %}
