@@ -23,4 +23,4 @@ class ResponseForm(forms.Form):
             if question.question_type == "TF":
                 self.fields['qpk{}'.format(question.pk)] = forms.ChoiceField(label=question.question, choices=qchoices, widget = forms.RadioSelect(renderer=HorizontalRadioRenderer))
             if question.question_type == "LT":
-                self.fields['qpk{}'.format(question.pk)] = forms.CharField(widget=forms.Textarea)
+                self.fields['qpk{}'.format(question.pk)] = forms.CharField(label=question.question,widget=forms.Textarea)
