@@ -1,5 +1,8 @@
 {% extends 'polls/base.html' %}
 {% block polls_content %}
-<h1>{{response.pk}}</h1>
-<p>{{ response.response }}</p>
+<h1>Results</h1>
+<p>Developer note: Change qpk<var>x</var> to the question text. For example, turn "{% with response.response|first as first %}{{first.question}}{% endwith %}" into "{{response.survey.question_set.first}}". The important thing is we have the question ID, the 'score', then we can evaluate it and put the data into a graph.</p>
+{% for question in response.response %}
+<p>{{ question.question }}:{{ question.answer }}</p>
+{% endfor %}
 {% endblock %}

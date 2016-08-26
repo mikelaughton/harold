@@ -203,7 +203,7 @@ DATABASES = {
         'CONN_MAX_AGE': 0,
         'ENGINE': 'django.db.backends.sqlite3',
         'HOST': 'localhost',
-        'NAME': 'project.db',
+        'NAME': '/home/mikelaughton/IPR_site/project.db',
         'PASSWORD': '',
         'PORT': '',
         'USER': ''
@@ -211,7 +211,7 @@ DATABASES = {
 }
 
 MIGRATION_MODULES = {
-    
+
 }
 
 THUMBNAIL_PROCESSORS = (

@@ -32,15 +32,18 @@ class ResultsView(generic.DetailView):
     template_name = 'polls/results.html'
 
 def respond(request,survey_id):
+    #You goofed this, you need to create a JSON array such that you have { "response":{ "question_pk":question_pk, "answer": answer },{ "question_pk":question_pk, "answer":answer } ... }
 	survey = get_object_or_404(Survey,pk=survey_id)
 	if request.method == 'POST':
 		form = ResponseForm(survey,request.POST)
 		if form.is_valid():
-			r_text = json.dumps(form.cleaned_data)
+		    #Create list of dictionaries
+			r_raw = [ {'question':qpk, 'answer':answer } for qpk,answer in list( form.cleaned_data.items() ) ]
+			r_text = json.dumps(r_raw)
 			response = Response(survey=survey,response_text=r_text)
 			response.save()
 			return HttpResponseRedirect(reverse('polls:booya',kwargs={'response_id':response.pk}))
-	else:	
+	else:
 		form = ResponseForm(survey)
 	context = { 'survey':survey, 'form':form }
 	#Pass on this lad, look it up.
